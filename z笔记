@@ -1,0 +1,3 @@
+affectedRows：受影响的行
+insertId：插入的id
+changedRows：改变的行

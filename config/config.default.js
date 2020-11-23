@@ -32,7 +32,7 @@ module.exports = appInfo => {
         host: 'localhost',
         // 端口号
         port: '3306',
-        ...公司,
+        ...外网,
         // 用户名
         user: 'wj_test',
         // 密码
@@ -51,13 +51,27 @@ module.exports = appInfo => {
   config.keys = appInfo.name + '_1605682603171_5995';
 
   // add your middleware config here
-  config.middleware = [];
-
+  config.middleware = ['errorHandler'];
+  // 只对 /api 前缀的 url 路径生效
+  config.errorHandler = {
+    match: '/api',
+  }
+  // 文件
+  config.multipart = {
+    fileSize: '10mb',
+    whitelist: ['.png', '.jpg'],
+    mode: 'file'
+  }
   // add your user config here
   const userConfig = {
     // myAppName: 'egg',
   };
-
+  // 关闭csrf校验
+  config.security =  {
+    csrf: {
+      enable: false
+    }
+  }
   return {
     ...config,
     ...userConfig,

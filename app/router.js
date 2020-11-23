@@ -6,6 +6,6 @@
 module.exports = app => {
   const { router, controller } = app;
   router.get('/', controller.home.index);
-  router.get('/pet', controller.pet.getList);
-  router.get('/user', controller.user.getList);
+  router.post('/upload', controller.file.upload);
+  router.resources('banner', '/api/banner', app.controller.banner);
 };

@@ -1,7 +1,7 @@
 {
-  "name": "egg",
+  "name": "example",
   "version": "1.0.0",
-  "description": "egg",
+  "description": "",
   "private": true,
   "egg": {
     "declarations": true
@@ -9,7 +9,8 @@
   "dependencies": {
     "egg": "^2.15.1",
     "egg-mysql": "^3.0.0",
-    "egg-scripts": "^2.11.0"
+    "egg-scripts": "^2.11.0",
+    "egg-validate": "^2.0.2"
   },
   "devDependencies": {
     "autod": "^3.0.1",
@@ -24,8 +25,8 @@
     "node": ">=10.0.0"
   },
   "scripts": {
-    "start": "egg-scripts start --daemon --title=egg-server-egg",
-    "stop": "egg-scripts stop --title=egg-server-egg",
+    "start": "egg-scripts start --daemon --title=egg-server-example",
+    "stop": "egg-scripts stop --title=egg-server-example",
     "dev": "egg-bin dev",
     "debug": "egg-bin debug",
     "test": "npm run lint -- --fix && npm run test-local",
@@ -42,6 +43,6 @@
     "type": "git",
     "url": ""
   },
-  "author": "wangjin",
+  "author": "",
   "license": "MIT"
 }
