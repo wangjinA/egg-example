@@ -1,3 +1,28 @@
-affectedRows：受影响的行
-insertId：插入的id
-changedRows：改变的行
+mysql操作
+  affectedRows：受影响的行
+  insertId：插入的id
+  changedRows：改变的行
+
+文件上传
+  //  一文搞懂eggjs中上传文件 https://blog.csdn.net/kuangshp128/article/details/93197919  
+  
+  file模式 文件模式；会在本地存储文件
+  需要在config.multipart = {
+    mode: file
+  }
+  获取file  ctx.request.files = [file,...] 
+
+  stream模式 流模式；
+  单个文件： ctx.getFileStream()
+  多个文件： parts = ctx.multipart()
+            let part
+            while ((part = await parts()) != null) {
+              part === stream
+            }
+  当写入文件出错时，需要调用
+    const sendToWormhole = require('stream-wormhole');
+    sendToWormhole(part | stream);
+  来销毁文件流
+  // https://eggjs.org/zh-cn/basics/controller.html#stream-模式
+  
+

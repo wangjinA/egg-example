@@ -49,7 +49,7 @@ module.exports = appInfo => {
 
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1605682603171_5995';
-
+  
   // add your middleware config here
   config.middleware = ['errorHandler'];
   // 只对 /api 前缀的 url 路径生效
@@ -58,10 +58,16 @@ module.exports = appInfo => {
   }
   // 文件
   config.multipart = {
-    fileSize: '10mb',
-    whitelist: ['.png', '.jpg'],
-    mode: 'file'
+    fileSize: '50mb',
+    // whitelist: ['.png', '.jpg'], // 白名单，只能使用这里面的文件后缀
+    fileExtensions: ['.msi'],
+    // mode: 'file'
+    mode: 'stream'
   }
+  config.uploadDir = 'app/public/avatar/upload';
+  config.oss = {
+    useAgent: true,
+  };
   // add your user config here
   const userConfig = {
     // myAppName: 'egg',
