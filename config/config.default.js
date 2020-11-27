@@ -32,7 +32,7 @@ module.exports = appInfo => {
         host: 'localhost',
         // 端口号
         port: '3306',
-        ...外网,
+        ...公司,
         // 用户名
         user: 'wj_test',
         // 密码
@@ -49,9 +49,10 @@ module.exports = appInfo => {
 
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1605682603171_5995';
-  
+
   // add your middleware config here
-  config.middleware = ['errorHandler'];
+  // 从右往左执行
+  config.middleware = ['errorHandler', 'test'];
   // 只对 /api 前缀的 url 路径生效
   config.errorHandler = {
     match: '/api',
@@ -73,7 +74,7 @@ module.exports = appInfo => {
     // myAppName: 'egg',
   };
   // 关闭csrf校验
-  config.security =  {
+  config.security = {
     csrf: {
       enable: false
     }
