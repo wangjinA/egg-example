@@ -1,4 +1,5 @@
 const Service = require('egg').Service;
+const { SuccessModel, ErrorModel } = require('../models/resModel');
 
 class datavService extends Service {
   constructor(ctx) {
@@ -19,15 +20,15 @@ class datavService extends Service {
     return result.insertId;
   }
   async update(params) {
-    const sql = `UPDATE datav set preview_img='${params.previewImg}', name='${params.name}', option='${params.option}' WHERE id=${this.id}`
+    const sql = `UPDATE datav set preview_img='${params.previewImg}', name='${params.name}', \`option\`='${params.option}' WHERE id=${this.id}`
     const result = await this.app.mysql.query(sql)
     if (!result.changedRows && result.affectedRows) {
-      return '暂无更改'
+      return new SuccessModel('暂无更改')
     }
     if (result.changedRows) {
-      return '修改成功'
+      return new SuccessModel('修改成功')
     } else {
-      return '修改失败'
+      return new ErrorModel('修改失败')
     }
   }
   async destroy() {

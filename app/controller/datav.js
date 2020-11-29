@@ -5,7 +5,10 @@ const Controller = require('egg').Controller;
 
 const createRule = {
   name: 'string',
-  img: 'string'
+  preview_img: 'string',
+  option: {
+    type: 'string',
+  }
 }
 
 class DatavController extends Controller {
