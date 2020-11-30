@@ -43,7 +43,7 @@ class DatavController extends Controller {
   async update() {
     const ctx = this.ctx;
     ctx.validate(createRule, ctx.request.body);
-    console.log(ctx.request.body);
+    // console.log(ctx.request.body);
     const result = await ctx.service.datav.update(ctx.request.body);
     ctx.body = result
   }
