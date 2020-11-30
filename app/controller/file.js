@@ -35,7 +35,8 @@ class FileController extends Controller {
           img: await this.singleUpload(stream),
           params: stream.fields
         }
-      }catch(err){
+      } catch (err) {
+        console.log(err);
         ctx.body = '文件不能为空'
       }
     }

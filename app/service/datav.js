@@ -20,13 +20,22 @@ class datavService extends Service {
     return result.insertId;
   }
   async update(params) {
-    const sql = `UPDATE datav set preview_img='${params.previewImg}', name='${params.name}', \`option\`='${params.option}' WHERE id=${this.id}`
-    const result = await this.app.mysql.query(sql)
+    // const sql = `UPDATE datav set preview_img='${params.preview_img}', name='${params.name}', \`option\`='${option}' WHERE id=${this.id}`
+    // const result = await this.app.mysql.query(sql)
+    const { app } = this
+    const row = app.$utils.delNull({
+      id: this.id,
+      preview_img: params.preview_img,
+      name: params.name,
+      option: params.option
+    })
+
+    const result = await app.mysql.update('datav', row);
     if (!result.changedRows && result.affectedRows) {
-      return new SuccessModel('暂无更改')
+      return new SuccessModel('暂无更改', '暂无更改')
     }
     if (result.changedRows) {
-      return new SuccessModel('修改成功')
+      return new SuccessModel('修改成功', '修改成功')
     } else {
       return new ErrorModel('修改失败')
     }
@@ -36,9 +45,9 @@ class datavService extends Service {
     const result = await this.app.mysql.query(sql)
     console.log(result);
     if (result.affectedRows) {
-      return '删除成功'
+      return new SuccessModel('删除成功', '删除成功')
     } else {
-      return '删除失败'
+      return new ErrorModel('删除失败')
     }
   }
 }

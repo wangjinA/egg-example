@@ -1,18 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
 </head>
+
 <body>
-  <form method="POST" action="/upload" enctype="multipart/form-data">
-    title: <input name="title" />
-    file1: <input name="file1" type="file" />
-    file2: <input name="file2" type="file" />
-    file2: <input name="file3" type="file" />
-    file2: <input name="file4" type="file" />
-    <button type="submit">Upload</button>
-  </form>
+  <!-- <form method="POST" action="/upload" enctype="multipart/form-data"> -->
+  title: <input name="title" />
+  file1: <input name="file1" id="test" type="file" />
+  file2: <input name="file2" type="file" />
+  file2: <input name="file3" type="file" />
+  file2: <input name="file4" type="file" />
+  <button onclick="sb()">Upload</button>
+  <!-- </form> -->
+  <script>
+    function sb() {
+      const file = test.files[0]
+      const formData = new FormData()
+      formData.append('file', file)
+      fetch('/api/upload', {
+        method: "POST",
+        body: formData, //自动修改请求头,formdata的默认请求头的格式是 multipart/form-data
+        Headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+    }
+  </script>
 </body>
+
 </html>
