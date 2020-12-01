@@ -10,7 +10,7 @@ class datavService extends Service {
     let sql = `SELECT * FROM datav`
     isShow && (sql += ` WHERE id=${this.id}`)
     const result = await this.app.mysql.query(sql)
-    return result;
+    return this.id ? (result[0] || {}) : result;
   }
 
   async create(params) {
