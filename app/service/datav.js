@@ -16,7 +16,7 @@ class datavService extends Service {
   async create(params) {
     const sql = `INSERT INTO datav (preview_img, name, option) VALUES ('${params.previewImg}', '${params.name}', '${params.option}')`
     const result = await this.app.mysql.query(sql)
-    console.log(result);
+    // console.log(result);
     return result.insertId;
   }
   async update(params) {
@@ -43,7 +43,7 @@ class datavService extends Service {
   async destroy() {
     const sql = `DELETE FROM datav WHERE id=${this.id}`
     const result = await this.app.mysql.query(sql)
-    console.log(result);
+    // console.log(result);
     if (result.affectedRows) {
       return new SuccessModel('删除成功', '删除成功')
     } else {

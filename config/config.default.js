@@ -32,7 +32,7 @@ module.exports = appInfo => {
         host: 'localhost',
         // 端口号
         port: '3306',
-        ...公司,
+        ...外网,
         // 用户名
         user: 'wj_test',
         // 密码
