@@ -19,15 +19,30 @@ const createRule = {
 }
 
 class DatavController extends Controller {
+  constructor(ctx) {
+    super(ctx);
+    this.id = ctx.params.id
+  }
   // 查询
   async index() {
     const { ctx } = this;
-    ctx.body = new SuccessModel(await ctx.service.datav.index())
+    let result = await ctx.service.datav.index()
+    result.forEach(item => {
+      delete item.option
+      delete item.style
+    });
+    ctx.body = new SuccessModel(result)
   }
-
+  // 查询单个
   async show() {
     const { ctx } = this;
-    ctx.body = new SuccessModel(await ctx.service.datav.index(true))
+    let result = await ctx.service.datav.index(true)
+    try {
+      result.style = JSON.parse(result.style)
+    } catch (error) {
+      result.style = {}
+    }
+    ctx.body = new SuccessModel(result)
   }
 
   // 创建

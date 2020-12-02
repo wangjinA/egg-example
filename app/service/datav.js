@@ -9,8 +9,14 @@ class datavService extends Service {
   async index(isShow = false) {
     let sql = `SELECT * FROM datav`
     isShow && (sql += ` WHERE id=${this.id}`)
-    const result = await this.app.mysql.query(sql)
-    return this.id ? (result[0] || {}) : result;
+    let result
+    if (this.id) {
+      let filter_result = (await this.app.mysql.query(sql))[0]
+      result = filter_result || {}
+    } else {
+      result = await this.app.mysql.query(sql)
+    }
+    return result
   }
 
   async create(params) {
@@ -26,6 +32,7 @@ class datavService extends Service {
     const row = app.$utils.delNull({
       id: this.id,
       preview_img: params.preview_img,
+      style: params.style,
       name: params.name,
       option: params.option
     })
