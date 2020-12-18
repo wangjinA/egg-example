@@ -25,62 +25,37 @@ module.exports = appInfo => {
    * built-in config
    * @type {Egg.EggAppConfig}
    **/
-  const config = exports = {
-    mysql: {
-      client: {
-        // host
-        host: 'localhost',
-        // 端口号
-        port: '3306',
-        ...公司,
-        // 用户名
-        user: 'wj_test',
-        // 密码
-        password: 'wj_test',
-        // 数据库名
-        database: 'wjtest',
-      },
-      // 是否加载到 app 上，默认开启
-      app: true,
-      // 是否加载到 agent 上，默认关闭
-      agent: false,
-    }
+  const config = {
+    keys: appInfo.name + '_1605682603171_5995',
+    // add your middleware config here
+    // 从右往左执行
+    middleware: ['errorHandler', 'test'],
+    // 只对 /api 前缀的 url 路径生效
+    errorHandler: {
+      match: '/api',
+    },
+    multipart: {
+      fileSize: '50mb',
+      // whitelist: ['.png', '.jpg'], // 白名单，只能使用这里面的文件后缀
+      fileExtensions: ['.mp4', '.webm'],
+      // mode: 'file'
+      mode: 'stream'
+    },
+    uploadDir: 'app/public/images/datav',
+    oss: {
+      useAgent: true,
+    },
+    // 关闭csrf校验
+    security: {
+      csrf: {
+        enable: false
+      }
+    },
+    static: {
+      prefix: '/public/',
+    },
   };
-
-  // use for cookie sign key, should change to your own and keep security
-  config.keys = appInfo.name + '_1605682603171_5995';
-
-  // add your middleware config here
-  // 从右往左执行
-  config.middleware = ['errorHandler', 'test'];
-  // 只对 /api 前缀的 url 路径生效
-  config.errorHandler = {
-    match: '/api',
-  }
-  // 文件
-  config.multipart = {
-    fileSize: '50mb',
-    // whitelist: ['.png', '.jpg'], // 白名单，只能使用这里面的文件后缀
-    fileExtensions: ['.msi'],
-    // mode: 'file'
-    mode: 'stream'
-  }
-  config.uploadDir = 'app/public/avatar/upload';
-  config.oss = {
-    useAgent: true,
-  };
-  // add your user config here
-  const userConfig = {
-    // myAppName: 'egg',
-  };
-  // 关闭csrf校验
-  config.security = {
-    csrf: {
-      enable: false
-    }
-  }
   return {
     ...config,
-    ...userConfig,
   };
 };

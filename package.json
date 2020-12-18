@@ -13,6 +13,7 @@
     "egg-oss": "^2.0.0",
     "egg-scripts": "^2.11.0",
     "egg-validate": "^2.0.2",
+    "mkdirp": "^1.0.4",
     "stream-wormhole": "^1.1.0"
   },
   "devDependencies": {
@@ -37,7 +38,8 @@
     "cov": "egg-bin cov",
     "lint": "eslint .",
     "ci": "npm run lint && npm run cov",
-    "autod": "autod"
+    "autod": "autod",
+    "apidoc": "apidoc -i app/controller -o app/public/apidoc"
   },
   "ci": {
     "version": "10"

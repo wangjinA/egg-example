@@ -28,8 +28,8 @@ class datavService extends Service {
   async update(params) {
     // const sql = `UPDATE datav set preview_img='${params.preview_img}', name='${params.name}', \`option\`='${option}' WHERE id=${this.id}`
     // const result = await this.app.mysql.query(sql)
-    const { app } = this
-    const row = app.$utils.delNull({
+    const { app, ctx } = this
+    const row = ctx.helper.delNull({
       id: this.id,
       preview_img: params.preview_img,
       style: params.style,

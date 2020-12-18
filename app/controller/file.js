@@ -8,9 +8,9 @@
  * }
  * 获取file  ctx.request.files = [file,...] 
  */
-
+const mkdirp = require('mkdirp')
 const Controller = require('egg').Controller;
-
+const { ErrorModel, SuccessModel } = require("../models/resModel")
 //故名思意 异步二进制 写入流
 const awaitWriteStream = require('await-stream-ready').write;
 // 销毁流；翻译：将管道读入一个虫洞；虫洞===消失
@@ -19,9 +19,13 @@ const sendToWormhole = require('stream-wormhole');
 const fs = require('fs')
 const path = require('path');
 
-const targetDir = 'app/public/'
+const targetDir = 'app/public/images/datav'
 class FileController extends Controller {
-
+  constructor(ctx) {
+    super(ctx);
+    this.uploadDir = this.app.config.uploadDir
+    // this.id = ctx.params.id
+  }
   async upload() {
     const { ctx, config } = this;
     // file模式
@@ -31,13 +35,14 @@ class FileController extends Controller {
       // ctx.body = await this.streamModel(await ctx.multipart())
       try {
         const stream = await ctx.getFileStream()
-        ctx.body = {
-          img: await this.singleUpload(stream),
+        ctx.body = new SuccessModel({
+          src: await this.singleUpload(stream),
           params: stream.fields
-        }
+        })
       } catch (err) {
         console.log(err);
-        ctx.body = '文件不能为空'
+        ctx.status = 500
+        ctx.body = new ErrorModel('文件不能为空')
       }
     }
   }
@@ -137,15 +142,30 @@ class FileController extends Controller {
       }
     })
   }
-
+  // stream模式下的单图上传   返回 'dir/fileName.png'
   async singleUpload(stream) {
-    console.log(stream);
-    const writeStream = fs.createWriteStream(path.join(targetDir + stream.filename));
+
+    let paramDir = stream.fields.dir || '_common'
+    let dirName = path.join(this.uploadDir, paramDir)
+    let pathName = path.join(this.uploadDir, paramDir, stream.filename)
+    console.log('上传文件目录：' + dirName);
+    let resultDirName = mkdirp.sync(dirName)
+    if (!resultDirName) {
+      console.log('目录已存在')
+    }
+    const writeStream = fs.createWriteStream(pathName);
     try {
       //异步把文件流 写入
       await awaitWriteStream(stream.pipe(writeStream));
-      return stream.filename
+      let returnPath = path.join(paramDir, stream.filename).replace(/\\/g, '/')
+      if (returnPath[0] === '/') {
+        return returnPath.substr(1)
+      }
+      return returnPath
+      // return stream.filename
     } catch (err) {
+      console.log('上传出错');
+      console.log(err);
       //如果出现错误，关闭管道
       await sendToWormhole(stream);
       return 'error_write_fail'

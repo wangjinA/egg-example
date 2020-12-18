@@ -9,7 +9,7 @@
 
 <body>
   <!-- <form method="POST" action="/upload" enctype="multipart/form-data"> -->
-  title: <input name="title" />
+  dir: <input name="dir" id="dir" />
   file1: <input name="file1" id="test" type="file" />
   file2: <input name="file2" type="file" />
   file2: <input name="file3" type="file" />
@@ -20,6 +20,7 @@
     function sb() {
       const file = test.files[0]
       const formData = new FormData()
+      formData.append('dir', dir.value)
       formData.append('file', file)
       fetch('/api/upload', {
         method: "POST",

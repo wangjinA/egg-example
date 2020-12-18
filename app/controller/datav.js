@@ -23,6 +23,26 @@ class DatavController extends Controller {
     super(ctx);
     this.id = ctx.params.id
   }
+
+  /**
+   * @api {get} /api/login 数据查询
+   * @apiDescription 用户登录
+   * @apiName login
+   * @apiGroup User
+   * @apiParam {string} userName 用户名
+   * @apiParam {string} password 密码
+   * @apiSuccess {json} data 数据
+   * @apiSuccessExample {json} Success-Response:
+   *  {
+   *      "status" : 1,
+   *      "data" : {
+   *          "name" : "loginName",
+   *          "password" : "loginPass"
+   *      }
+   *  }
+   * @apiSampleRequest http://localhost:7001/api/datav
+   * @apiVersion 1.0.0
+   */
   // 查询
   async index() {
     const { ctx } = this;
