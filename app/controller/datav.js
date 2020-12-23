@@ -1,6 +1,6 @@
 'use strict';
-const { SuccessModel } = require('../models/resModel');
-
+const { SuccessModel, ErrorModel } = require('../models/resModel');
+const datavModel = require('../models/datavModule')
 const Controller = require('egg').Controller;
 
 const createRule = {
@@ -24,25 +24,6 @@ class DatavController extends Controller {
     this.id = ctx.params.id
   }
 
-  /**
-   * @api {get} /api/login 数据查询
-   * @apiDescription 用户登录
-   * @apiName login
-   * @apiGroup User
-   * @apiParam {string} userName 用户名
-   * @apiParam {string} password 密码
-   * @apiSuccess {json} data 数据
-   * @apiSuccessExample {json} Success-Response:
-   *  {
-   *      "status" : 1,
-   *      "data" : {
-   *          "name" : "loginName",
-   *          "password" : "loginPass"
-   *      }
-   *  }
-   * @apiSampleRequest http://localhost:7001/api/datav
-   * @apiVersion 1.0.0
-   */
   // 查询
   async index() {
     const { ctx } = this;
@@ -53,27 +34,33 @@ class DatavController extends Controller {
     });
     ctx.body = new SuccessModel(result)
   }
-  // 查询单个
+  // 查询单个 判断id
   async show() {
     const { ctx } = this;
-    let result = await ctx.service.datav.index(true)
+    let result = await ctx.service.datav.index()
     try {
       result.style = JSON.parse(result.style)
+      ctx.body = new SuccessModel(result)
     } catch (error) {
-      result.style = {}
+      ctx.body = new ErrorModel('数据不存在')
     }
-    ctx.body = new SuccessModel(result)
   }
 
   // 创建
   async create() {
+
     const ctx = this.ctx;
-    ctx.validate(createRule, ctx.request.body);
-    const id = await ctx.service.datav.create(ctx.request.body);
-    ctx.body = {
+    let style = JSON.stringify({
+      ...datavModel.style,
+      ...ctx.request.body.style
+    })
+    const data = { ...datavModel, ...ctx.request.body, style }
+    const id = await ctx.service.datav.create(data);
+    ctx.body = new SuccessModel({
       id,
-    };
+    });
   }
+
   // 修改
   async update() {
     const ctx = this.ctx;
@@ -82,11 +69,32 @@ class DatavController extends Controller {
     const result = await ctx.service.datav.update(ctx.request.body);
     ctx.body = result
   }
-  // 修改
+
+  // 删除
   async destroy() {
     const ctx = this.ctx;
     const result = await ctx.service.datav.destroy();
     ctx.body = result
+  }
+
+  // 使用模板
+  async useTemplate() {
+    const { ctx } = this
+    const { body } = ctx.request
+    let result = await ctx.service.datav.index(body.id)
+    if (!result) {
+      ctx.body = new ErrorModel('模板为空')
+    } else {
+      const id = await ctx.service.datav.create({
+        name: body.name || result.name + ' - 拷贝',
+        preview_img: result.preview_img,
+        style: result.style,
+        option: result.option,
+      });
+      ctx.body = new SuccessModel({
+        id,
+      });
+    }
   }
 }
 

@@ -5,14 +5,20 @@ class datavService extends Service {
   constructor(ctx) {
     super(ctx);
     this.id = ctx.params.id
+    this.type = ctx.query.type || 0
   }
-  async index(isShow = false) {
-    let sql = `SELECT * FROM datav`
-    isShow && (sql += ` WHERE id=${this.id}`)
+  // 查询列表 给id就查单个 isShow查id返回对象 否则返回数组
+  async index(id) {
+    let _id = this.id || id
+    let sql = `SELECT * FROM datav `
+    if (_id) {
+      sql += `WHERE id=${_id}`
+    } else {
+      sql += `WHERE type=${this.type}`
+    }
     let result
-    if (this.id) {
-      let filter_result = (await this.app.mysql.query(sql))[0]
-      result = filter_result || {}
+    if (_id) {
+      result = (await this.app.mysql.query(sql))[0]
     } else {
       result = await this.app.mysql.query(sql)
     }
@@ -20,8 +26,8 @@ class datavService extends Service {
   }
 
   async create(params) {
-    const sql = `INSERT INTO datav (preview_img, name, option) VALUES ('${params.previewImg}', '${params.name}', '${params.option}')`
-    const result = await this.app.mysql.query(sql)
+    // const sql = `INSERT INTO datav (preview_img, name, option, style) VALUES ('${params.preview_img}', '${params.name}', '${params.option}', '${params.style}')`
+    const result = await this.app.mysql.insert('datav', params)
     // console.log(result);
     return result.insertId;
   }
